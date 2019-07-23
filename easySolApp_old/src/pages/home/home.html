@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Easy Sol
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="bgImg" padding>
+  <ion-avatar>
+    <img src="../../assets/imgs/logoeasysolLogo.png" class="icon">
+  </ion-avatar>
+  <ion-list class="login">
+    <ion-item padding-bottom>
+      <ion-label floating>Supplier</ion-label>
+      <ion-input type="text" name="userID" [(ngModel)]="supplier.userId"></ion-input>
+    </ion-item>
+  
+    <ion-item padding-bottom>
+      <ion-label floating>Password</ion-label>
+      <ion-input type="password" name="pass" [(ngModel)]="supplier.password"></ion-input>
+    </ion-item>
+  
+  </ion-list>
+  <button ion-button block  large padding round (click)="setSupplier()">Set Supplier</button>
+</ion-content>

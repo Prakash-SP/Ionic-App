@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>smLogin</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="background-image" padding>
+  <div class="suppName">
+    <ion-badge color="dark" padding> <ion-icon name="person"></ion-icon> {{supplierName}} </ion-badge>
+  </div>
+  <form #salesLogin="ngForm">
+    <ion-list class="login" padding>
+      <ion-item>
+        <ion-label position="floating">Sales ID</ion-label>
+        <ion-input type="number" name="userID" [(ngModel)]="salesMan.UserId"></ion-input>
+      </ion-item>
+    
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input type="password" name="pass" [(ngModel)]="salesMan.Password"></ion-input>
+      </ion-item>
+    </ion-list>
+    <ion-button color="primary" padding-vertical expand="block" (click)="salesManLogin()">Login</ion-button>
+    <ion-button color="danger" padding-vertical expand="block" (click)="resetSupplier()">Reset Supplier</ion-button>
+  </form>
+</ion-content>

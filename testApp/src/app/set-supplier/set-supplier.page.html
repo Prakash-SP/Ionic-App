@@ -1,0 +1,24 @@
+<ion-content padding color="tertiary">
+  <ion-grid>
+    <ion-row>
+      <ion-col align-self-center size="12" size-md>
+      <!-- <ion-avatar> -->
+        <div style="text-align: center">
+            <img src="../../assets/icon/logoeasysolLogo.png" class="icon">
+        </div>
+      <!-- </ion-avatar> -->
+        <ion-list class="login" padding>
+          <ion-item>
+            <ion-label position="floating">Supplier</ion-label>
+            <ion-input type="text" name="userID" [(ngModel)]="supplier.userId"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" name="pass" [(ngModel)]="supplier.password"></ion-input>
+          </ion-item>
+          <ion-button color="primary" padding-vertical expand="block" (click)="setSupplier()">Set Supplier</ion-button>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

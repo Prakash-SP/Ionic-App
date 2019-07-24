@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { MenuController } from '@ionic/angular';
+import { MenuController,ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { isNull } from 'util';
+import { ModalPage } from '../modal/modal.page';
+import { AlertService } from '../alert.service';
 
 @Component({
   selector: 'app-home',
@@ -18,8 +19,10 @@ export class HomePage {
   itemObj : any = {}
   customerObj : any = {}
   constructor(
+    public modalController: ModalController,
     public menuCtrl: MenuController,
     private _router : Router,
+    private _alertSer : AlertService
   ) {}
 
   ionViewWillEnter() {
@@ -48,9 +51,16 @@ export class HomePage {
     // this.getCustomers()
   }
 
+  syncData(){
+    alert("Sync Start")
+
+  }
   logout(){
     localStorage.removeItem('SalesManName');
     this._router.navigate(['/sm-login']);
   }
 
+  presentModal() {
+    this._alertSer.popUp()
+  }
 }

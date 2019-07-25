@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { ApiService } from './api.service'
 import { from } from 'rxjs';
+import { element } from '@angular/core/src/render3';
 
 @Injectable({
   providedIn: 'root'
@@ -9,17 +10,15 @@ import { from } from 'rxjs';
 export class AlertService {
 
   currentDate = new Date();
-  Items:any=false
-  Customers:any=false
+  
+  toSync=["Customers","Items"]
   isItemSycn = false
   isCustomerSync = false
 
-  salesManName = ""
-  suppID = ""
+  salesManName = localStorage.getItem('SalesManName')
+  suppID = localStorage.getItem('lSupp')
   date = "01-Jan-2000"
 
-  items : any = []
-  customers : any = []
   itemObj : any = {}
   customerObj : any = {}
   
@@ -27,20 +26,6 @@ export class AlertService {
     private _alertController: AlertController,
     private _apiService:ApiService
     ) { }
-
-    cust(event) {
-      if ( event.target.checked ) {
-          this.Customers = true;
-          console.log(this.Customers)
-     }
-    }
-
-    item(event) {
-      if ( event.target.checked ) {
-          this.Items = true;
-          console.log(this.Items)
-     }
-    }
 
   async emptyTextFieldMsg(_msg) {
     const alert = await this._alertController.create({
@@ -75,87 +60,89 @@ export class AlertService {
 
   async popUp() {
     const alert = await this._alertController.create({
-      header: 'Sync Data Now',
-      message: `<ion-list>
-                  <ion-item>
-                    <ion-label>Item</ion-label>
-                    <ion-checkbox (change)="cust($event)"></ion-checkbox>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>Customer</ion-label>
-                    <ion-checkbox [{}]></ion-checkbox>
-                  </ion-item>
-                </ion-list>
-      `,
+      header: 'Checkbox',
+      inputs: [
+        {
+          name: 'Items',
+          type: 'checkbox',
+          label: 'Items',
+          value: 'Items',
+        },
+
+        {
+          name: 'Customers',
+          type: 'checkbox',
+          label: 'Customers',
+          value: 'Customers',
+        },
+      ],
       buttons: [
         {
-          text: 'Sync Data',
+          text: 'Cancel',
+          role: 'cancel',
           cssClass: 'secondary',
-          handler: () => {
-            this.startSync()
-            // var a = 10
-            // console.log('Confirm Ok',a);
-          }
+        }, {
+          text: 'Ok',
         }
       ]
     });
     await alert.present();
-  }
-  startSync(){
-    // let selectedOption : any = {}
-    // this.checkBoxVal.filter(ele=>{
-    //   if(ele.isChecked == true){
-    //     selectedOption = ele
-    //     if(selectedOption.val == "Items"){
-    //       this.getItems()
-    //       console.log("getItems")
-          
-    //       ele.isChecked = false
-    //     } else if(selectedOption.val == "Customers"){
-    //       this.getCustomers()
-    //       console.log("getCusomters")
-          
-    //       ele.isChecked = false
-    //     }
-    //   } else {
-    //     this.emptyTextFieldMsg("Please select atleast one option to start sync process");
-    //   } 
-    // })
+    let result =await alert.onDidDismiss();
+    console.log(result)
+
+    let a=result.data.values
+    this.startSync(a)
   }
 
+  startSync(data){
+    let selectedOption : any = {}
+    
+    if(data.length){
+      for(let i=0; i<data.length;i++){
+        if(data[i] == 'Items'){
+          this.getItems()
+        } else if(data[i] == 'Customers'){
+          this.getCustomers()
+        }
+      }
+    }
+  }
+
+  items : any = []
   getItems(){
-    // this._apiService.getItems(this.suppID,this.date)
-    //   .subscribe(
-    //     res=>{
-    //       this.itemObj = res;
-    //       this.items = this.itemObj.getitemsResult
-    //       // this.items.forEach(item => {
-    //       //   console.log(item.Name)
-    //       // })
-    //       this.setSupplierSuccessMsg("Items sync successfully.")
+    this._apiService.getItems(this.suppID,this.date)
+      .subscribe(
+        res=>{
+          this.itemObj = res;
+          this.items = this.itemObj.getitemsResult
+          this.items.forEach(item => {
+            console.log(item.Name)
+          })
+          this.setSupplierSuccessMsg("Items sync successfully.")
                     
-    //     },
-    //     err=>{
-    //       this.setSupplierErrorMsg(err.message)
-    //     }
-    //   )
+        },
+        err=>{
+          this.setSupplierErrorMsg(err.message)
+        }
+      )
   }
 
+  customers : any = []
   getCustomers(){
-    // this._apiService.getCustomerInfo(this.suppID,this.date)
-    //   .subscribe(
-    //     res=>{
-    //       this.customerObj = res;
-    //       this.customers = this.customerObj.getcustomersResult
-    //       // this.customers.forEach(customer => {
-    //       //   console.log(customer.Name)
-    //       // })
-    //       this.setSupplierSuccessMsg("Customers sync successfully.")
+    this._apiService.getCustomerInfo(this.suppID,this.date)
+      .subscribe(
+        res=>{
+          this.customerObj = res;
+          this.customers = this.customerObj.getcustomersResult
+          this.customers.forEach(customer => {
+            console.log(customer.Name)
+          })
+          this.setSupplierSuccessMsg("Customers sync successfully.")
           
-    //     },
-    //     err=>{
-    //       this.setSupplierErrorMsg(err.message)
-    //     }
-    //   )
+        },
+        err=>{
+          this.setSupplierErrorMsg(err.message)
+        }
+      )
   }
 }

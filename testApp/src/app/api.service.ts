@@ -15,9 +15,11 @@ export class ApiService {
   setSupplier(userId ,password){
     return this._http.post(this.apiUrl + '/userlogin',{"UserId":userId,"Password":password});
   }
+
   loginSalesMan(lSupName,userID,pass){
     return this._http.post(this.apiUrl + '/smanlogin',{"lSuppName":lSupName, "UserId":userID,"Password":pass})
   }
+  
   getItems(suppName, date){
     return this._http.post(this.apiUrl + '/getitems',{"lSuppName" : suppName,"lDate" : date,"lCode" : "0","lSyncType" : ""})
   }
